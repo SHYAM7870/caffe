@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velora Café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f0f10;
+      --bg2:#171718;
+      --card:#1c1c1f;
+      --text:#f5f1ea;
+      --muted:#c8c1b7;
+      --accent:#d4a373;
+      --accent2:#b08968;
+      --line:rgba(255,255,255,.08);
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:24px;
+      --max:1200px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(212,163,115,.14), transparent 28%),
+        linear-gradient(180deg, #111112 0%, #0f0f10 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(var(--max), calc(100% - 32px)); margin:0 auto}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;padding:14px 22px;border-radius:999px;
+      border:1px solid transparent;font-weight:600;cursor:pointer;
+      transition:.3s ease; white-space:nowrap;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#181613; box-shadow:0 12px 30px rgba(212,163,115,.25)}
+    .btn-primary:hover{transform:translateY(-2px); filter:brightness(1.05)}
+    .btn-ghost{border-color:var(--line); background:rgba(255,255,255,.03)}
+    .btn-ghost:hover{background:rgba(255,255,255,.07)}
+    .section{padding:96px 0}
+    .section-head{
+      display:flex;justify-content:space-between;align-items:end;gap:20px;
+      margin-bottom:32px;flex-wrap:wrap
+    }
+    .eyebrow{
+      text-transform:uppercase;letter-spacing:.24em;font-size:.78rem;
+      color:var(--accent);font-weight:700;margin-bottom:12px
+    }
+    h1,h2,h3,.logo{
+      font-family:'Playfair Display',serif;
+      line-height:1.05;
+    }
+    h1{font-size:clamp(3rem, 8vw, 6.3rem)}
+    h2{font-size:clamp(2rem, 4vw, 3.5rem)}
+    h3{font-size:1.5rem}
+    p{color:var(--muted);line-height:1.8}
+    .nav{
+      position:fixed;inset:0 0 auto 0;z-index:1000;
+      backdrop-filter:blur(18px);
+      background:rgba(10,10,10,.5);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      transition:.3s ease;
+    }
+    .nav-inner{
+      height:78px;display:flex;align-items:center;justify-content:space-between;gap:16px
+    }
+    .logo{font-size:1.7rem;font-weight:800;letter-spacing:.02em}
+    .logo span{color:var(--accent)}
+    .nav-links{display:flex;align-items:center;gap:28px}
+    .nav-links a{
+      font-size:.95rem;color:var(--muted);transition:.25s ease;position:relative
+    }
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:-8px;width:100%;height:2px;
+      background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:.25s ease
+    }
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .menu-btn{
+      display:none;background:none;border:0;color:var(--text);font-size:1.9rem;cursor:pointer
+    }
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      align-items:center;
+      padding-top:110px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:-120px -120px auto auto;width:480px;height:480px;
+      background:radial-gradient(circle, rgba(212,163,115,.18), transparent 70%);
+      filter:blur(10px); pointer-events:none;
+    }
+    .hero-grid{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center
+    }
+    .hero-copy{
+      position:relative;z-index:1
+    }
+    .hero-copy p{max-width:620px;font-size:1.02rem;margin:20px 0 30px}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+    .hero-stats{
+      display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;padding-top:24px;border-top:1px solid var(--line)
+    }
+    .stat strong{display:block;font-size:1.6rem;color:var(--text)}
+    .stat span{font-size:.93rem;color:var(--muted)}
+    .hero-card{
+      position:relative;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:32px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      transform:rotate(0deg);
+    }
+    .hero-card img{
+      width:100%;height:640px;object-fit:cover;border-radius:24px
+    }
+    .floating-badge{
+      position:absolute;
+      left:-18px;bottom:36px;
+      background:rgba(20,20,20,.72);
+      border:1px solid rgba(255,255,255,.09);
+      backdrop-filter:blur(14px);
+      border-radius:18px;
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+      max-width:240px;
+    }
+    .floating-badge .small{font-size:.8rem;color:var(--accent);text-transform:uppercase;letter-spacing:.18em;font-weight:700}
+    .floating-badge h4{font-size:1.05rem;margin:6px 0 4px}
+    .floating-badge p{font-size:.9rem;line-height:1.5}
+
+    .chips{display:flex;gap:10px;flex-wrap:wrap}
+    .chip{
+      padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.04);
+      border:1px solid var(--line);color:var(--muted);font-size:.92rem
+    }
+
+    .about-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:30px;align-items:center}
+    .about-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+      border:1px solid var(--line);
+      border-radius:28px;padding:22px;box-shadow:var(--shadow)
+    }
+    .about-image{
+      border-radius:28px;overflow:hidden;min-height:520px;box-shadow:var(--shadow)
+    }
+    .about-image img{width:100%;height:100%;object-fit:cover}
+    .feature-list{display:grid;gap:14px;margin-top:22px}
+    .feature{
+      display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:18px;
+      background:rgba(255,255,255,.03);border:1px solid var(--line)
+    }
+    .feature .icon{
+      width:42px;height:42px;border-radius:14px;flex:0 0 42px;
+      display:grid;place-items:center;background:linear-gradient(135deg, rgba(212,163,115,.25), rgba(176,137,104,.12));
+      color:#f8e7d4;font-weight:700
+    }
+
+    .menu-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:22px
+    }
+    .menu-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      transition:.3s ease;
+    }
+    .menu-card:hover{transform:translateY(-6px)}
+    .menu-card img{height:240px;width:100%;object-fit:cover}
+    .menu-body{padding:20px}
+    .menu-top{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:10px}
+    .price{color:var(--accent);font-weight:700}
+    .menu-meta{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:14px
+    }
+
+    .gallery-grid{
+      display:grid;grid-template-columns:repeat(12,1fr);gap:16px
+    }
+    .g-item{
+      border-radius:22px;overflow:hidden;min-height:220px;border:1px solid var(--line);box-shadow:var(--shadow)
+    }
+    .g-item img{width:100%;height:100%;object-fit:cover}
+    .g1{grid-column:span 5}
+    .g2{grid-column:span 4}
+    .g3{grid-column:span 3}
+    .g4{grid-column:span 3}
+    .g5{grid-column:span 4}
+    .g6{grid-column:span 5}
+
+    .testimonials{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:20px
+    }
+    .review{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow)
+    }
+    .review .top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .avatar{
+      width:54px;height:54px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid;place-items:center;color:#1b1610;font-weight:800
+    }
+    .stars{color:#f4c542;letter-spacing:.12em;margin-bottom:12px}
+
+    .contact-grid{
+      display:grid;grid-template-columns:.95fr 1.05fr;gap:22px;align-items:start
+    }
+    .contact-box,.form-box{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)
+    }
+    .info{
+      display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line)
+    }
+    .info:last-child{border-bottom:0}
+    .info strong{display:block;margin-bottom:4px}
+    .form{
+      display:grid;gap:14px
+    }
+    .input, textarea{
+      width:100%;padding:15px 16px;border-radius:16px;
+      border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.18);
+      color:var(--text);outline:none;transition:.25s ease;font:inherit
+    }
+    .input:focus, textarea:focus{border-color:rgba(212,163,115,.6);box-shadow:0 0 0 4px rgba(212,163,115,.08)}
+    textarea{min-height:140px;resize:vertical}
+
+    .footer{
+      padding:34px 0 42px;
+      border-top:1px solid var(--line);
+      color:var(--muted)
+    }
+    .footer-inner{
+      display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap
+    }
+
+    .reveal{opacity:0;transform:translateY(26px);transition:.8s ease}
+    .reveal.show{opacity:1;transform:translateY(0)}
+
+    @media (max-width: 1100px){
+      .hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
+      .menu-grid,.testimonials{grid-template-columns:repeat(2,1fr)}
+      .gallery-grid{grid-template-columns:repeat(6,1fr)}
+      .g1,.g2,.g3,.g4,.g5,.g6{grid-column:span 3}
+      .hero-card img{height:520px}
+    }
+    @media (max-width: 768px){
+      .nav-links{
+        position:fixed;top:78px;left:0;right:0;
+        background:rgba(12,12,12,.96);
+        border-bottom:1px solid var(--line);
+        padding:18px 24px;
+        flex-direction:column;align-items:flex-start;gap:18px;
+        transform:translateY(-120%);transition:.3s ease;
+      }
+      .nav-links.active{transform:translateY(0)}
+      .menu-btn{display:block}
+      .hero{padding-top:96px}
+      .section{padding:78px 0}
+      .menu-grid,.testimonials{grid-template-columns:1fr}
+      .gallery-grid{grid-template-columns:1fr 1fr}
+      .g1,.g2,.g3,.g4,.g5,.g6{grid-column:span 1}
+      .hero-actions{flex-direction:column;align-items:stretch}
+      .hero-actions .btn{width:100%}
+      .hero-stats{gap:18px}
+      .hero-card img{height:420px}
+      .floating-badge{left:14px;right:14px;bottom:14px;max-width:none}
+    }
+    @media (max-width: 520px){
+      h1{font-size:clamp(2.5rem, 13vw, 4rem)}
+      .gallery-grid{grid-template-columns:1fr}
+      .g1,.g2,.g3,.g4,.g5,.g6{grid-column:span 1}
+      .nav-inner{height:72px}
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#home" class="logo">Velora<span> Café</span></a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow">Premium café experience</div>
+          <h1>Crafted coffee, warm ambience, and elegant moments.</h1>
+          <p>
+            Welcome to Velora Café, where rich flavors meet a calm, luxurious space.
+            Enjoy artisan coffee, handcrafted desserts, and a beautifully designed dining experience.
+          </p>
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-primary">Explore Menu</a>
+            <a href="#contact" class="btn btn-ghost">Reserve a Table</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>10K+</strong><span>Happy Guests</span></div>
+            <div class="stat"><strong>4.9/5</strong><span>Average Rating</span></div>
+            <div class="stat"><strong>25+</strong><span>Signature Items</span></div>
+          </div>
+        </div>
+
+        <div class="hero-card reveal">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=80" alt="Cafe interior" />
+          <div class="floating-badge">
+            <div class="small">Today’s Special</div>
+            <h4>Velora Signature Latte</h4>
+            <p>Silky espresso, caramel cream, and a soft cinnamon finish.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container about-grid">
+        <div class="about-image reveal">
+          <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1200&q=80" alt="Coffee and dessert" />
+        </div>
+        <div class="about-card reveal">
+          <div class="eyebrow">About us</div>
+          <h2>Designed for slow mornings and beautiful evenings.</h2>
+          <p style="margin-top:16px">
+            Velora Café blends modern luxury with cozy comfort. Every detail is built to feel polished:
+            from the lighting and music to the presentation on your table.
+          </p>
+          <div class="feature-list">
+            <div class="feature">
+              <div class="icon">01</div>
+              <div>
+                <h3>Artisan recipes</h3>
+                <p>Specialty drinks and desserts made with premium ingredients.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="icon">02</div>
+              <div>
+                <h3>Elegant space</h3>
+                <p>Clean layouts, warm textures, and a premium atmosphere.</p>
+              </div>
+            </div>
+            <div class="feature">
+              <div class="icon">03</div>
+              <div>
+                <h3>Fresh every day</h3>
+                <p>Freshly baked pastries and carefully brewed coffee served daily.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Our menu</div>
+            <h2>Signature drinks and premium bites.</h2>
+          </div>
+          <p style="max-width:520px">
+            A carefully curated menu built to look elegant and feel inviting on every screen size.
+          </p>
+        </div>
+
+        <div class="menu-grid">
+          <article class="menu-card reveal">
+            <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80" alt="Coffee" />
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3>Classic Cappuccino</h3>
+                <span class="price">₹180</span>
+              </div>
+              <p>Espresso with velvety milk foam and a deep, balanced aroma.</p>
+              <div class="menu-meta">
+                <span class="chip">Hot</span><span class="chip">Best Seller</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80" alt="Dessert" />
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3>Chocolate Truffle Cake</h3>
+                <span class="price">₹260</span>
+              </div>
+              <p>Rich, soft, and layered with a glossy chocolate finish.</p>
+              <div class="menu-meta">
+                <span class="chip">Dessert</span><span class="chip">Fresh Baked</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=1200&q=80" alt="Breakfast" />
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3>Avocado Toast</h3>
+                <span class="price">₹220</span>
+              </div>
+              <p>Fresh toast topped with creamy avocado, seeds, and herbs.</p>
+              <div class="menu-meta">
+                <span class="chip">Healthy</span><span class="chip">Brunch</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Gallery</div>
+            <h2>A premium look that feels alive.</h2>
+          </div>
+          <p style="max-width:520px">
+            Beautiful visuals, balanced spacing, and a refined aesthetic made for modern cafés.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+          <div class="g-item g1 reveal"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80" alt="Cafe table" /></div>
+          <div class="g-item g2 reveal"><img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80" alt="Barista" /></div>
+          <div class="g-item g3 reveal"><img src="https://images.unsplash.com/photo-1485555785605-9f3a9a6f8d8a?auto=format&fit=crop&w=1200&q=80" alt="Coffee cup" /></div>
+          <div class="g-item g4 reveal"><img src="https://images.unsplash.com/photo-1461988320302-91bde64fc8e4?auto=format&fit=crop&w=1200&q=80" alt="Cafe food" /></div>
+          <div class="g-item g5 reveal"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80" alt="Cafe interior" /></div>
+          <div class="g-item g6 reveal"><img src="https://images.unsplash.com/photo-1509731144131-38d9f7cbe8b1?auto=format&fit=crop&w=1200&q=80" alt="Pastries" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="reviews">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <div class="eyebrow">Reviews</div>
+            <h2>Guests love the atmosphere.</h2>
+          </div>
+          <p style="max-width:520px">
+            Clean design and strong social proof help the page feel trustworthy and premium.
+          </p>
+        </div>
+
+        <div class="testimonials">
+          <div class="review reveal">
+            <div class="top">
+              <div class="avatar">A</div>
+              <div>
+                <h3>Ananya</h3>
+                <p style="font-size:.92rem">Regular visitor</p>
+              </div>
+            </div>
+            <div class="stars">★★★★★</div>
+            <p>Absolutely stunning café experience. The coffee tastes incredible and the place feels super luxurious.</p>
+          </div>
+
+          <div class="review reveal">
+            <div class="top">
+              <div class="avatar">R</div>
+              <div>
+                <h3>Rahul</h3>
+                <p style="font-size:.92rem">Food lover</p>
+              </div>
+            </div>
+            <div class="stars">★★★★★</div>
+            <p>The layout looks expensive, modern, and elegant. Perfect for a café brand that wants premium vibes.</p>
+          </div>
+
+          <div class="review reveal">
+            <div class="top">
+              <div class="avatar">M</div>
+              <div>
+                <h3>Meera</h3>
+                <p style="font-size:.92rem">Brunch guest</p>
+              </div>
+            </div>
+            <div class="stars">★★★★★</div>
+            <p>The ambience, colors, and menu section all feel polished. It’s beautiful on mobile too.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-box reveal">
+          <div class="eyebrow">Contact</div>
+          <h2>Visit us or book your table.</h2>
+          <p style="margin-top:14px">
+            Drop by for coffee, brunch, or a relaxed evening. We will keep the vibe warm and welcoming.
+          </p>
+
+          <div class="info" style="margin-top:24px">
+            <div class="icon">📍</div>
+            <div>
+              <strong>Location</strong>
+              <p>Park Street, Kolkata, India</p>
+            </div>
+          </div>
+          <div class="info">
+            <div class="icon">📞</div>
+            <div>
+              <strong>Phone</strong>
+              <p>+91 98765 43210</p>
+            </div>
+          </div>
+          <div class="info">
+            <div class="icon">✉️</div>
+            <div>
+              <strong>Email</strong>
+              <p>hello@veloracafe.com</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-box reveal">
+          <h3 style="margin-bottom:18px">Reservation Form</h3>
+          <form class="form" onsubmit="event.preventDefault(); alert('Reservation submitted successfully!'); this.reset();">
+            <input class="input" type="text" placeholder="Your Name" required />
+            <input class="input" type="email" placeholder="Email Address" required />
+            <input class="input" type="tel" placeholder="Phone Number" required />
+            <input class="input" type="date" required />
+            <textarea placeholder="Your message or special request"></textarea>
+            <button class="btn btn-primary" type="submit">Book Now</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© 2026 Velora Café. All rights reserved.</p>
+      <p>Designed for a premium single-page café experience.</p>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    menuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('active'));
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
